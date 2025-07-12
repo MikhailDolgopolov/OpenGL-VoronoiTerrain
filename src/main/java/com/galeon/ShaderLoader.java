@@ -4,51 +4,54 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
 
 public class ShaderLoader {
 
     private final int programId;
+    private final int vertexShaderId;
+    private final int fragmentShaderId;
 
     public ShaderLoader(GL3 gl, String vertPath, String fragPath) {
         programId = gl.glCreateProgram();
-        compileAndAttach(gl, vertPath, GL3.GL_VERTEX_SHADER);
-        compileAndAttach(gl, fragPath, GL3.GL_FRAGMENT_SHADER);
+        vertexShaderId=compileAndAttach(gl, vertPath, GL3.GL_VERTEX_SHADER);
+        fragmentShaderId=compileAndAttach(gl, fragPath, GL3.GL_FRAGMENT_SHADER);
         linkProgram(gl);
     }
 
-    private void compileAndAttach(GL3 gl, String path, int type) {
+    private int compileAndAttach(GL3 gl, String path, int type) {
         String src = readFile(path);
-        int shader = gl.glCreateShader(type);
-        gl.glShaderSource(shader, 1, new String[]{src}, null);
-        gl.glCompileShader(shader);
+        int shaderId = gl.glCreateShader(type);
+        gl.glShaderSource(shaderId, 1, new String[]{src}, null);
+        gl.glCompileShader(shaderId);
 
-        // Compilation check
-        int[] stat = new int[1];
-        gl.glGetShaderiv(shader, GL3.GL_COMPILE_STATUS, stat, 0);
-        if (stat[0] == GL3.GL_FALSE) {
-            int[] len = {0};
-            gl.glGetShaderiv(shader, GL3.GL_INFO_LOG_LENGTH, len, 0);
-            byte[] log = new byte[len[0]];
-            gl.glGetShaderInfoLog(shader, log.length, null, 0, log, 0);
-            throw new RuntimeException("Shader compile error (" + path + "):\n" + new String(log));
+        int[] status = new int[1];
+        gl.glGetShaderiv(shaderId, GL3.GL_COMPILE_STATUS, status, 0);
+        System.out.println("  compile status = " + status[0]);
+        if (status[0] == GL.GL_FALSE) {
+            int[] len = new int[1];
+            gl.glGetShaderiv(shaderId, GL3.GL_INFO_LOG_LENGTH, len, 0);
+            byte[] buf = new byte[len[0]];
+            gl.glGetShaderInfoLog(shaderId, buf.length, null, 0, buf, 0);
+            System.err.println(">>> SHADER INFO LOG:\n" + new String(buf));
         }
-
-        gl.glAttachShader(programId, shader);
-        gl.glDeleteShader(shader);
+        gl.glAttachShader(programId, shaderId);
+        return shaderId;
     }
 
     private void linkProgram(GL3 gl) {
         gl.glLinkProgram(programId);
 
-        int[] stat = new int[1];
-        gl.glGetProgramiv(programId, GL3.GL_LINK_STATUS, stat, 0);
-        if (stat[0] == GL3.GL_FALSE) {
-            int[] len = {0};
+        int[] status = new int[1];
+        gl.glGetProgramiv(programId, GL3.GL_LINK_STATUS, status, 0);
+        System.out.println("  link status = " + status[0]);
+        if (status[0] == GL.GL_FALSE) {
+            int[] len = new int[1];
             gl.glGetProgramiv(programId, GL3.GL_INFO_LOG_LENGTH, len, 0);
-            byte[] log = new byte[len[0]];
-            gl.glGetProgramInfoLog(programId, log.length, null, 0, log, 0);
-            throw new RuntimeException("Program link error:\n" + new String(log));
+            byte[] buf = new byte[len[0]];
+            gl.glGetProgramInfoLog(programId, buf.length, null, 0, buf, 0);
+            System.err.println(">>> PROGRAM INFO LOG:\n" + new String(buf));
         }
 
         gl.glValidateProgram(programId);
@@ -68,4 +71,7 @@ public class ShaderLoader {
     public int getProgramId() {
         return programId;
     }
+
+    public int getVertexShaderId() { return vertexShaderId; }
+    public int getFragmentShaderId() { return fragmentShaderId; }
 }
