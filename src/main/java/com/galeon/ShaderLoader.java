@@ -1,8 +1,9 @@
 package com.galeon;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
@@ -58,13 +59,21 @@ public class ShaderLoader {
     }
 
     private String readFile(String path) {
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) sb.append(line).append("\n");
-            return sb.toString();
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to read shader file: " + path, e);
+    if (path == null || path.isEmpty()) {
+        throw new IllegalArgumentException("Shader path cannot be null or empty");
+    }
+    try (InputStream in = getClass().getClassLoader().getResourceAsStream(path)) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        // System.out.println(">>> SHADER SOURCE:\n" + sb.toString());
+        return sb.toString();
+    } 
+    catch (IOException e) {
+        throw new RuntimeException("Unable to read shader: " + path, e);
         }
     }
 

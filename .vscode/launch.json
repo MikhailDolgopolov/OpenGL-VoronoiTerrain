@@ -1,11 +1,13 @@
 {
   "configurations": [
+  
     {
       "type": "java",
       "name": "Application",
       "request": "launch",
       "mainClass": "com.galeon.WindowDrawer",
-      "projectName": "planet-gen"
+      "projectName": "planet-gen",
+      "vmArgs": "-Djogl.debug.DebugGL"
     }
   ]
 }

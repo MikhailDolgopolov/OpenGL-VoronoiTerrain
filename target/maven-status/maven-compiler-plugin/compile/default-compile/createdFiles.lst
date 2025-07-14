@@ -1,4 +1,3 @@
 com\galeon\SimpleQuadRenderer.class
 com\galeon\SceneRenderer.class
 com\galeon\ShaderLoader.class
-com\galeon\WindowDrawer.class

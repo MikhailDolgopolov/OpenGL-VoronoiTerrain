@@ -8,7 +8,6 @@ import com.jogamp.opengl.util.FPSAnimator;
 import javax.swing.JFrame;
 import java.awt.EventQueue;
 
-
 public class WindowDrawer implements GLEventListener {
     private final SceneRenderer renderer;
 
@@ -18,44 +17,37 @@ public class WindowDrawer implements GLEventListener {
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
-           
+            GLProfile.initSingleton();
+            GLProfile profile = GLProfile.get(GLProfile.GL3);
+            GLCapabilities caps = new GLCapabilities(profile);
+            caps.setDoubleBuffered(true);
+
+            GLJPanel canvas = new GLJPanel(caps);
+            WindowDrawer dw = new WindowDrawer(new SimpleQuadRenderer());
+            canvas.addGLEventListener(dw);
+
+            FPSAnimator animator = new FPSAnimator(canvas, 1, true);
+            animator.start();
+
+            JFrame frame = new JFrame("Red Quad Test");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.getContentPane().add(canvas);
+            frame.setSize(800, 600);
+            frame.setVisible(true);
         });
-         GLProfile.initSingleton();
-        // System.setProperty("jogl.disable.openglcore", "true");
-        GLProfile profile = GLProfile.get(GLProfile.GL3);
-        GLCapabilities caps = new GLCapabilities(profile);
-        // GLCanvas canvas = new GLCanvas(caps);
-        GLJPanel canvas = new GLJPanel(caps);
-        canvas.addGLEventListener(new WindowDrawer(new SimpleQuadRenderer()));
-
-        FPSAnimator animator = new FPSAnimator(canvas, 1, true);
-        animator.start();
-
-        JFrame frame = new JFrame("My Window");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(canvas);
-        frame.setSize(800, 600);
-        frame.setVisible(true);
-    }
-
-    @Override
-    public void init(GLAutoDrawable drawable) {
-        renderer.init(drawable);
-    }
-
-    @Override
-    public void display(GLAutoDrawable drawable) {
-        renderer.display(drawable);
         
     }
 
-    @Override
-    public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
+    @Override public void init(GLAutoDrawable drawable) {
+        renderer.init(drawable);
+    }
+    @Override public void display(GLAutoDrawable drawable) {
+        renderer.display(drawable);
+    }
+    @Override public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
         renderer.reshape(drawable, x, y, w, h);
     }
-
-    @Override
-    public void dispose(GLAutoDrawable drawable) {
+    @Override public void dispose(GLAutoDrawable drawable) {
         renderer.dispose(drawable);
     }
 }
