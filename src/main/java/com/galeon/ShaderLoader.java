@@ -29,7 +29,6 @@ public class ShaderLoader {
 
         int[] status = new int[1];
         gl.glGetShaderiv(shaderId, GL3.GL_COMPILE_STATUS, status, 0);
-        System.out.println("  compile status = " + status[0]);
         if (status[0] == GL.GL_FALSE) {
             int[] len = new int[1];
             gl.glGetShaderiv(shaderId, GL3.GL_INFO_LOG_LENGTH, len, 0);
@@ -46,7 +45,6 @@ public class ShaderLoader {
 
         int[] status = new int[1];
         gl.glGetProgramiv(programId, GL3.GL_LINK_STATUS, status, 0);
-        System.out.println("  link status = " + status[0]);
         if (status[0] == GL.GL_FALSE) {
             int[] len = new int[1];
             gl.glGetProgramiv(programId, GL3.GL_INFO_LOG_LENGTH, len, 0);
