@@ -1,6 +1,12 @@
 {
   "configurations": [
-  
+    {
+      "type": "java",
+      "name": "VoronoiRenderer",
+      "request": "launch",
+      "mainClass": "com.galeon.Voronoi.VoronoiRenderer",
+      "projectName": "planet-gen"
+    },
     {
       "type": "java",
       "name": "Application",
