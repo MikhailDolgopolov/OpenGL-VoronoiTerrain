@@ -14,7 +14,7 @@ public abstract class WindowDrawer implements GLEventListener {
     protected WindowDrawer(String title) {
         EventQueue.invokeLater(() -> {
             GLProfile.initSingleton();
-            GLProfile profile = GLProfile.get(GLProfile.GL3);
+            GLProfile profile = GLProfile.get(GLProfile.GL4);
             GLCapabilities caps = new GLCapabilities(profile);
             caps.setDoubleBuffered(true);
 
@@ -37,7 +37,7 @@ public abstract class WindowDrawer implements GLEventListener {
     // Called once, on GL thread
     @Override
     public void init(GLAutoDrawable drawable) {
-        GL3 gl = drawable.getGL().getGL3();
+        GL4 gl = drawable.getGL().getGL4();
         // compile + link your shaders
         programId = loadProgram(gl, getVertexShader(), getFragmentShader());
         // and any other one‑time GL setup
@@ -47,29 +47,29 @@ public abstract class WindowDrawer implements GLEventListener {
     // Called every frame
     @Override
     public void display(GLAutoDrawable drawable) {
-        GL3 gl = drawable.getGL().getGL3();
+        GL4 gl = drawable.getGL().getGL4();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
         gl.glUseProgram(programId);
         render(gl);
     }
 
     @Override public void reshape(GLAutoDrawable d, int x, int y, int w, int h) {
-        d.getGL().getGL3().glViewport(x, y, w, h);
+        d.getGL().getGL4().glViewport(x, y, w, h);
     }
     @Override public void dispose(GLAutoDrawable d) {
-        d.getGL().getGL3().glDeleteProgram(programId);
+        d.getGL().getGL4().glDeleteProgram(programId);
     }
 
-    private int loadProgram(GL3 gl, String vert, String frag) {
+    private int loadProgram(GL4 gl, String vert, String frag) {
         ShaderLoader loader = new ShaderLoader(gl, vert, frag);
         return loader.getProgramId();
     }
 
     /** Called once after program is linked. Override to create VAO/VBO, textures, etc. */
-    protected void setup(GL3 gl) {}
+    protected void setup(GL4 gl) {}
 
     /** Called every frame (inside display). Override to set uniforms, bind VAO, draw. */
-    protected abstract void render(GL3 gl);
+    protected abstract void render(GL4 gl);
 
     /** Provide your GLSL paths here */
     protected abstract String getVertexShader();

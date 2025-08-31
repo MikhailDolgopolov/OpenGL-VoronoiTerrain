@@ -3,7 +3,7 @@ package com.galeon.Voronoi;
 import com.galeon.WindowDrawer;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL3;
+import com.jogamp.opengl.GL4;
 
 import java.nio.FloatBuffer;
 
@@ -38,7 +38,7 @@ public class VoronoiRenderer extends WindowDrawer {
     }
 
     @Override
-    protected void setup(GL3 gl) {
+    protected void setup(GL4 gl) {
         // Create fullscreen quad VAO/VBO
         float[] quad = {
             -1f,-1f,  1f,-1f,  -1f,1f,
@@ -62,7 +62,7 @@ public class VoronoiRenderer extends WindowDrawer {
     }
 
     @Override
-    protected void render(GL3 gl) {
+    protected void render(GL4 gl) {
         // Upload point data every frame (or only when changed)
         gl.glUniform1i(uPointCountLoc, NUM_POINTS);
         gl.glUniform2fv(uPointsLoc, NUM_POINTS, pointBuffer);

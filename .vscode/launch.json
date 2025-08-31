@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "AntsRenderer",
+      "request": "launch",
+      "mainClass": "com.galeon.Voronoi.AntsRenderer",
+      "projectName": "planet-gen"
+    },
+    {
+      "type": "java",
       "name": "VoronoiRenderer",
       "request": "launch",
       "mainClass": "com.galeon.Voronoi.VoronoiRenderer",

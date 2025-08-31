@@ -9,7 +9,7 @@ public class SimpleQuadRenderer implements SceneRenderer {
 
     @Override
     public void init(GLAutoDrawable drawable) {
-        GL3 gl = drawable.getGL().getGL3();
+        GL4 gl = drawable.getGL().getGL4();
 
 
         // compile & link
@@ -51,7 +51,7 @@ public class SimpleQuadRenderer implements SceneRenderer {
 
     @Override
     public void display(GLAutoDrawable drawable) {
-        GL3 gl = drawable.getGL().getGL3();
+        GL4 gl = drawable.getGL().getGL4();
 
         gl.glClearColor(0f, 0.5f, 0f, 1f);
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
@@ -68,10 +68,10 @@ public class SimpleQuadRenderer implements SceneRenderer {
     }
 
     @Override public void reshape(GLAutoDrawable d, int x, int y, int w, int h) {
-        d.getGL().getGL3().glViewport(0, 0, w, h);
+        d.getGL().getGL4().glViewport(0, 0, w, h);
     }
     @Override public void dispose(GLAutoDrawable d) {
-        GL3 gl = d.getGL().getGL3();
+        GL4 gl = d.getGL().getGL4();
         gl.glDeleteProgram(programId);
         gl.glDeleteBuffers(1, new int[]{vbo}, 0);
         gl.glDeleteVertexArrays(1, new int[]{vao}, 0);
